@@ -1,6 +1,9 @@
-const User = require('./User');
+const router = require('express').Router();
 
-// Define relationships
+const user = require('./user');
+const post = require('./post');
 
+router.use('/user', user);
+router.use('/post', post);
 
-module.exports = { User}
+module.exports = router;
