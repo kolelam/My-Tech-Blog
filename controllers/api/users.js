@@ -1,8 +1,8 @@
 const router = require('express').Router();
 
-const { User } = require('.');
+const { User } = require('../../models');
 
-// signup function
+// Create a new user with signup
 // ENDPOINT: "/api/user/signup"
 router.post('/signup', async (req, res) => {
     try {
@@ -54,7 +54,7 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// Logout function
+// Logout a user
 // ENDPOINT: "/api/user/logout"
 router.post('/logout', async (req, res) => {
     try {

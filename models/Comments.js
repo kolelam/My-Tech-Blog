@@ -1,9 +1,45 @@
-const router = require('express').Router();
+const { Model, DataTypes } = require('sequelize');
+const sequelize = require('../config/connection');
 
-const user = require('./user');
-const post = require('./post');
+class Comment extends Model {}
 
-router.use('/user', user);
-router.use('/post', post);
+Comment.init(
+    {
+        id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            primaryKey: true,
+            autoIncrement: true
+        },
+        content: {
+            type: DataTypes.STRING(100),
+            allowNull: false,
+        },
+        author: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        date: {
+            type: DataTypes.DATEONLY,
+            defaultValue: DataTypes.NOW,
+            allowNull: false
+        },
+        post_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: 'post',
+                key: 'id'
+            }
+        }
+    },
+    {
+        sequelize,
+        timestamps: false,
+        freezeTableName: true,
+        underscored: true,
+        modelName: 'comment',
+    }
+);
 
-module.exports = router;
+module.exports = Comment;
