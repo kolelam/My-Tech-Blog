@@ -8,7 +8,7 @@ const postTitle = document.getElementById('post-title');
 const postContent = document.getElementById('post-content');
 
 
-const hideForm = function(){
+const hideForm = function () {
     createForm.setAttribute('style', 'display: none;');
     showFormBtn.setAttribute('style', 'display: block;');
     currentPosts.setAttribute('style', 'display: block;');
@@ -18,20 +18,27 @@ const hideForm = function(){
 }
 
 
-createPostBtn.addEventListener('click', async(event) => {
-
+createPostBtn.addEventListener('click', async (event) => {
     const title = postTitle.value.trim();
     const content = postContent.value.trim();
 
     // send data to backend
-    console.log(title, content);
+    fetch('/api/post/create', {
+        method: 'POST',
+        body: JSON.stringify({ title, content }),
+        headers: { 'Content-Type': 'application/json' }
+    })
+        .then((response) => {
+            if (response.ok) {
+                location.reload();
+            } else {
+                alert('failed to create post');
+            }
+        });
 
-    hideForm();
 });
 
-cancelPostBtn.addEventListener('click', (event) => {
-    hideForm();
-});
+cancelPostBtn.addEventListener('click', hideForm);
 
 
 
@@ -57,31 +64,55 @@ const updatePostBtn = document.getElementById('update-post');
 const cancelUpdatePostBtn = document.getElementById('cancel-post-update');
 const deletePostBtn = document.getElementById('delete-post');
 
+const postId = document.getElementById('post-id')
 
 
-const showUpdateForm = function(event){
-    updateForm.setAttribute('style', 'display: block');
-    currentPosts.setAttribute('style', 'display: none');
-    showFormBtn.setAttribute('style', 'display: none');
+const showUpdateForm = function (event) {
+    currentTarget = event.target
+    container = '';
+    while (container !== 'post-container') {
+        container = currentTarget.getAttribute('name');
+        if (container !== 'post-container') currentTarget = currentTarget.parentElement;
+    }
 
     // get data from backend
-    // fetch()
-    // .then((response) => response.json())
-    // .then((data) => {
-    //     updateTitle.value = data.title
-    //     updateContent.value = data.content
-    // });
+    fetch(`/api/post/${currentTarget.id}`)
+        .then((response) => response.json())
+        .then((data) => {
+            updateTitle.value = data.title;
+            updateContent.value = data.content;
+            postId.textContent = currentTarget.id
+
+            updateForm.setAttribute('style', 'display: block');
+            currentPosts.setAttribute('style', 'display: none');
+            showFormBtn.setAttribute('style', 'display: none');
+        });
+
 }
 
-const hideUpdateForm = function(event){
+const hideUpdateForm = function (event) {
     updateForm.setAttribute('style', 'display: none');
     currentPosts.setAttribute('style', 'display: block');
     showFormBtn.setAttribute('style', 'display: block');
 }
 
 updatePostBtn.addEventListener('click', (event) => {
-    // send data to backend for post
-    hideUpdateForm(event);
+    const title = updateTitle.value;
+    const content = updateContent.value;
+
+    // send data to backend
+    fetch(`/api/post/update/${postId.textContent}`, {
+        method: 'PUT',
+        body: JSON.stringify({ title, content }),
+        headers: { 'Content-Type': 'application/json' }
+    })
+    .then((response) => {
+        if (response.ok) {
+            location.reload();
+        } else {
+            alert('failed to update post');
+        }
+    });
 });
 
 cancelUpdatePostBtn.addEventListener('click', (event) => {
@@ -89,6 +120,16 @@ cancelUpdatePostBtn.addEventListener('click', (event) => {
 });
 
 deletePostBtn.addEventListener('click', (event) => {
-    // send data to backend for post deletion
-    hideUpdateForm(event);
+    // send data to backend
+    fetch(`/api/post/delete/${postId.textContent}`, {
+        method: 'DELETE',
+    })
+    .then((response) => {
+        if (response.ok) {
+            location.reload();
+        } else {
+            console.log(response)
+            alert('failed to delete post');
+        }
+    });
 });
