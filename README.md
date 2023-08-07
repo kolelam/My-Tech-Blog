@@ -4,9 +4,9 @@
 
 My MVC Tech Blog is a CMS-style blog site where developers can publish their blog posts and interact with other developers' posts through comments. The blog site is designed to provide a platform for developers to share their thoughts, opinions, and technical knowledge with the community. Writing about technology is essential for developers, as it allows them to not only showcase their expertise but also contribute to the broader tech community. Through blog posts, developers can discuss technical concepts, share their experiences, and provide valuable insights into recent advancements and new technologies. By doing so, they can help others learn and grow in their respective fields.
 
-## Link
+## Deployed Link
 
-()
+(https://my-mvc-techblog-14a3c24c9719.herokuapp.com/)
 
 ## Technologies Used
 
